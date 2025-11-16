@@ -355,3 +355,44 @@ pipeline = pipeline(model="google/gemma-7b", dtype=torch.bfloat16, device_map="a
 pipeline("the secret to baking a good cake is ")
 [{'generated_text': 'the secret to baking a good cake is 1. the right ingredients 2. the right'}]
 ```
+
+# Advanced NER example
+Named Entity Recognition (NER) is a token classification task used to detect and label entities such as people, locations, or organizations in text.
+The Transformers library provides an easy-to-use pipeline interface to run NER with just a few lines of code — no model training or preprocessing required.
+Here's an example that uses a pre-trained BERT model to perform NER:
+
+
+
+```py
+from transformers import pipeline
+```
+
+### Load the NER pipeline with a standard model
+```py
+ner_pipeline = pipeline(
+    task="ner",
+    model="dslim/bert-base-NER",
+    grouped_entities=True
+)
+
+text = "Hugging Face was founded in Paris and later moved to New York."
+
+
+```
+
+### Run inference
+```py
+entities = ner_pipeline(text)
+
+for entity in entities:
+    print(
+        f"Entity: {entity['word']}, "
+        f"Label: {entity['entity_group']}, "
+        f"Score: {entity['score']:.2f}"
+    )
+```
+
+# Output
+Entity: Hugging Face, Label: ORG, Score: 0.99  
+Entity: Paris, Label: LOC, Score: 0.99  
+Entity: New York, Label: LOC, Score: 0.99  
